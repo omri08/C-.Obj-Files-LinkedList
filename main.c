@@ -1,4 +1,4 @@
-
+#define _CRT_SECURE_NO_WARNINGS
 #include "Scene.h"
 void main()
 {
@@ -11,8 +11,9 @@ void main()
 
 	// Count the total area of all Triangular faces of all objects in Scene 
 	perform(scene, getTotalArea, "DOUBLE", "The total area of Triangular faces of all objects is");
-
-
+	saveScene(scene, "s.txt", TextFormat);
 	
+	
+
 	
 }

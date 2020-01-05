@@ -10,7 +10,7 @@ typedef struct {
 	// Array of all Faces
 	int  numberOfFaces;
 	Face* faces;
-	char* name;
+	
 } Object;
 
 void initFacesAndVerts(FILE* fToRead, Object* o, char* line);
@@ -20,4 +20,7 @@ void transformObject(char* originalObjectFileName, char* deformedObjectFileName)
 void printFaces(Object* ptr, void* numberOfTriangularFaces);
 void printVertexes(Object* ptr, void* numberOfVertexes);
 void getTotalArea(Object* ptr, void* totalAreaOfTriangularFaces);
-void printAll(Object* ptr);
+void printObjToFile(Object* ptr, FILE* f);
+void printAllVerToFile(Vertex* arr, int size, FILE* f);
+void printAllFacesToFile(Face* arr, int size, FILE* f);
+

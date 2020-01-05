@@ -91,7 +91,7 @@ Object* createObject(char* filename)
 {
 	// handling basics inits
 	Object* o = (Object*)malloc(sizeof(Object));
-	o->name = filename;
+	
 	if (!o)
 		return NULL;
 
@@ -151,11 +151,23 @@ void getTotalArea(Object* ptr, void* totalAreaOfTriangularFaces)
 
 }
 
-void printAll(Object* ptr)
+void printObjToFile(Object* ptr, FILE* f)
 {
-	for (int i = 0; i < ptr->numberOfVertexes; i++)
-	{
-		printf("%f %f %f\n", ptr->vertexes[i].x, ptr->vertexes[i].y, ptr->vertexes[i].z);
-	}
 
+	
+	printAllVerToFile(ptr->vertexes, ptr->numberOfVertexes, f);
+	printAllFacesToFile(ptr->faces, ptr->numberOfFaces, f);
+	fprintf(f,"newObject\n");
+}
+
+void printAllVerToFile(Vertex* arr, int size, FILE* f)
+{
+	for (int i = 0; i < size; i++)
+		printVerToFile(arr[i], f);
+}
+
+void printAllFacesToFile(Face* arr, int size, FILE* f)
+{
+	for (int i = 0; i < size; i++)
+		printFaceToFile(arr[i], f);
 }

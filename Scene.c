@@ -25,7 +25,15 @@ Scene* createScene(char* fileName, ...)
 	currentName = fileName;
 	while (currentName)
 	{
-		ptr = L_insert(ptr, createObject(currentName));
+		Object* key = createObject(currentName);
+		if (!key)
+		{
+			printf("Worng Name // error with creating an object");
+			freeScene(s);
+			va_end(allNames);
+			return NULL;
+		}
+		ptr = L_insert(ptr,key );
 		currentName = va_arg(allNames, char*);
 		int num;
 	}
@@ -183,6 +191,7 @@ Scene* loadSceneFromBin(char* fileName)
 	for (int i = 0; i < numOfObjects; i++)
 		ptr = L_insert(ptr, loadObjFromBin(f));
 
+	fclose(f);
 	return s;
 	
 		
@@ -226,4 +235,11 @@ Scene* loadSceneFromText(char* fileName)
 		}
 	fclose(f);
 	return s;
+}
+
+void freeScene(Scene* scene)
+{
+	L_free(&scene->lst, freeObject);
+	free(&scene->lst);
+	free(scene);
 }

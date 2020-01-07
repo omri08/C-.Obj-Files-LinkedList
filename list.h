@@ -24,7 +24,7 @@ BOOL L_init(LIST* pList);					// create new list
 
 NODE* L_insert(NODE* pNode, DATA Value);	// add new node after *pNode
 
-BOOL L_delete(NODE* pNode, void (*free)(void*));					// erase node after *pNode
+BOOL L_delete(NODE* pNode, void (*freeKey)(void*));					// erase node after *pNode
 
-BOOL L_free(LIST* pList, void (*free)(void*));					// free list memory
+BOOL L_free(LIST* pList, void (*freeKey)(void*));					// free list memory
 

@@ -55,7 +55,7 @@ NODE* L_insert(NODE* pNode, DATA Value)
 // Input:	pointer to the node BEFORE the node to be deleted 
 // Output:	TRUE if succeeded
 //////////////////////////////////////////////////////////////
-BOOL L_delete(NODE* pNode, void (*free)(void*))
+BOOL L_delete(NODE* pNode, void (*freeKey)(void*))
 {
 	NODE* tmp;
 	if (!pNode)
@@ -65,6 +65,7 @@ BOOL L_delete(NODE* pNode, void (*free)(void*))
 		return False;
 
 	pNode->next = tmp->next;
+	freeKey(tmp->key);
 	free(tmp);
 	return True;
 }
@@ -78,7 +79,7 @@ BOOL L_delete(NODE* pNode, void (*free)(void*))
 // Input:	pointer to the list structure
 // Output:	TRUE if succeeded
 ////////////////////////////////////////////////
-BOOL L_free(LIST* pList, void (*free)(void*))
+BOOL L_free(LIST* pList, void (*freeKey)(void*))
 {
 	NODE* tmp;
 	BOOL cont = True;

@@ -221,3 +221,14 @@ Object* loadObjFromBin(FILE* f)
 
 	return o;
 }
+
+void freeObject(void* o)
+{
+	Object* op = (Object*)o;
+	for (int i = 0; i < op->numberOfVertexes; i++)
+		free(&op->vertexes[i]);
+	free(op->vertexes);
+	for (int i = 0; i < op->numberOfFaces; i++)
+		freeFace(&op->faces);
+	free(o);
+}

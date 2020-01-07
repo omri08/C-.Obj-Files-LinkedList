@@ -19,4 +19,5 @@ void saveSceneToText(Scene* s, char* fileName);
 Scene* loadScene(char* fileName, enum FileType type);
 Scene* loadSceneFromBin(char* fileName);
 Scene* loadSceneFromText(char* fileName);
+void freeScene(Scene* scene);
 

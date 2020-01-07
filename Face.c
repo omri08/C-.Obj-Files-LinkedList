@@ -106,3 +106,8 @@ void loadFaceFromBin(Face* fp, FILE* f)
 	fread(fp->vertex, sizeof(int), fp->size, f);
 
 }
+void freeFace(Face* f)
+{
+	free(f->vertex);
+	free(f);
+}

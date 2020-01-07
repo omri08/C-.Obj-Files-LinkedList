@@ -25,4 +25,5 @@ void printObjToBin(Object* ptr, FILE* f);
 void printAllVerToFile(Vertex* arr, int size, FILE* f);
 void printAllFacesToFile(Face* arr, int size, FILE* f);
 Object* loadObjFromBin(FILE* f);
+void freeObject(void* o);
 

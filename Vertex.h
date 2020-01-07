@@ -14,3 +14,4 @@ char* vertexToString(Vertex* v);
 void printVerToFile(Vertex v,FILE* f);
 void printVerToBin(Vertex v, FILE* f);
 void loadVerFromBin(Vertex* v, FILE* f);
+

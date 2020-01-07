@@ -21,6 +21,8 @@ void printFaces(Object* ptr, void* numberOfTriangularFaces);
 void printVertexes(Object* ptr, void* numberOfVertexes);
 void getTotalArea(Object* ptr, void* totalAreaOfTriangularFaces);
 void printObjToFile(Object* ptr, FILE* f);
+void printObjToBin(Object* ptr, FILE* f);
 void printAllVerToFile(Vertex* arr, int size, FILE* f);
 void printAllFacesToFile(Face* arr, int size, FILE* f);
+Object* loadObjFromBin(FILE* f);
 

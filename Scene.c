@@ -43,9 +43,10 @@ void perform(Scene* s, void (*funcPtr)(Object*, void*), char* type, char* line)
 	while (ptr)
 	{
 		funcPtr(ptr->key, res);
-		printRes(line, type, res);
 		ptr = ptr->next;
+		
 	}
+	printRes(line, type, res);
 }
 
 void printRes(char* line, char* type, void* res)
@@ -58,7 +59,7 @@ void printRes(char* line, char* type, void* res)
 		printf("%s %d\n", line, *(int*)res);
 	
 	else if (strcmp(type, db) == 0)
-		printf("%s %f\n", line, *(float*)res);
+		printf("%s %lf\n", line, *(double*)res);
 	else if (strcmp(type, s) == 0)
 		printf("%s %s\n", line, (char*)res);
 	else
@@ -74,12 +75,12 @@ void* createVar(char* type)
 
 	if (strcmp(type, in) == 0)
 	{
-		res = malloc(sizeof(int));
+		res = calloc(1,sizeof(int));
 		return res;
 	}
 	else if (strcmp(type, db) == 0)
 	{
-		res = malloc(sizeof(double));
+		res = calloc(1,sizeof(double));
 		return res;
 	}
 		
@@ -109,10 +110,26 @@ void saveScene(Scene* scene, char* fileName, enum FileType type)
 
 void saveSceneToBin(Scene* s, char* fileName)
 {
+	int numOfObjects = 0;
 	FILE* f = fopen(fileName, "wb");
 	if (!f)
 		return;
-	fwrite(s, sizeof(Scene), 1, f);
+	
+	NODE* ptr = s->lst.head.next;
+
+	while (ptr)
+	{
+		numOfObjects++;
+		ptr = ptr->next;
+	}
+
+	ptr = s->lst.head.next;
+	fwrite(&numOfObjects, sizeof(int), 1, f);
+	while (ptr)
+	{
+		printObjToBin(ptr->key, f);
+		ptr = ptr->next;
+	}
 	fclose(f);
 }
 
@@ -130,4 +147,83 @@ void saveSceneToText(Scene* s, char* fileName)
 	}
 	
 	fclose(f);
+}
+
+Scene* loadScene(char* fileName, enum FileType type)
+{
+	Scene* s;
+	if (type == 0)
+		s = loadSceneFromText(fileName);
+	else
+		s = loadSceneFromBin(fileName);
+
+}
+
+Scene* loadSceneFromBin(char* fileName)
+{
+	Scene* s = (Scene*)malloc(sizeof(Scene));
+	if (!s)
+		return NULL;
+
+	if (L_init(&s->lst) == False)
+	{
+		free(s);
+		return NULL;
+	}
+
+	FILE* f = fopen(fileName, "rb");
+	if (!f) {
+		free(s);
+		return NULL;
+	}
+    
+	int numOfObjects;
+	fread(&numOfObjects, sizeof(int), 1, f);
+	NODE* ptr = &s->lst.head;
+	for (int i = 0; i < numOfObjects; i++)
+		ptr = L_insert(ptr, loadObjFromBin(f));
+
+	return s;
+	
+		
+}
+
+
+Scene* loadSceneFromText(char* fileName)
+{
+	Scene* s = (Scene*)malloc(sizeof(Scene));
+	char line[300];
+	if (!s)
+		return NULL;
+	FILE* f = fopen(fileName, "r");
+	if (!f)
+	{
+		free(s);
+		return NULL;
+	}
+
+	if (L_init(&s->lst) == False)
+	{
+		free(s);
+		fclose(f);
+		return NULL;
+	}
+
+	NODE* ptr = &s->lst.head;
+		while (fgets(line, 300, f))
+		{
+			fseek(f, -1, SEEK_CUR); // to make sure we dont read important line
+			Object* o = (Object*)malloc(sizeof(Object));
+			if (!initObjectProps(o))
+			{
+				free(s);
+				free(o);
+				fclose(f);
+				return NULL;
+			}
+			initFacesAndVerts(f, o, line);
+			ptr = L_insert(ptr, o);
+		}
+	fclose(f);
+	return s;
 }

@@ -55,7 +55,7 @@ NODE* L_insert(NODE* pNode, DATA Value)
 // Input:	pointer to the node BEFORE the node to be deleted 
 // Output:	TRUE if succeeded
 //////////////////////////////////////////////////////////////
-BOOL L_delete(NODE* pNode)
+BOOL L_delete(NODE* pNode, void (*free)(void*))
 {
 	NODE* tmp;
 	if (!pNode)
@@ -70,26 +70,6 @@ BOOL L_delete(NODE* pNode)
 }
 
 
-/////////////////////////////////////////////////////////
-// Find
-// Aim:		search for a value
-// Input:	pointer to the node to start with 
-//			a value to be found
-// Output:	pointer to the node containing the Value
-/////////////////////////////////////////////////////////
-NODE* L_find(NODE* pNode, DATA Value)
-{
-	NODE* tmp = pNode;
-
-	while (tmp != NULL)
-	{
-		if (tmp->key == Value)
-			return tmp;
-		tmp = tmp->next;
-	}
-
-	return NULL;
-}
 
 
 ////////////////////////////////////////////////
@@ -98,7 +78,7 @@ NODE* L_find(NODE* pNode, DATA Value)
 // Input:	pointer to the list structure
 // Output:	TRUE if succeeded
 ////////////////////////////////////////////////
-BOOL L_free(LIST* pList)
+BOOL L_free(LIST* pList, void (*free)(void*))
 {
 	NODE* tmp;
 	BOOL cont = True;
@@ -107,34 +87,9 @@ BOOL L_free(LIST* pList)
 
 	tmp = &(pList->head);
 	while (cont)
-		cont = L_delete(tmp);
+		cont = L_delete(tmp,free);
 
 	return True;
 }
 
 
-////////////////////////////////////////////////
-// Print (additional function)
-// Aim:		print the list content (assume the DATA is int)
-// Input:	pointer to the list structure
-// Output:	a number of the printed elements
-////////////////////////////////////////////////
-int L_print(LIST* pList)
-{
-	NODE* tmp;
-	int		c = 0;
-
-	if (!pList)
-		return False;
-
-	printf("\n");
-	tmp = pList->head.next;
-	while (tmp != NULL)
-	{
-		printf(" %d ---> ", tmp->key);
-		c++;
-		tmp = tmp->next;
-	}
-	printf("\n");
-	return c;
-}

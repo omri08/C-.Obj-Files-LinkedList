@@ -81,3 +81,28 @@ float distance(float x1, float y1, float z1, float x2, float y2, float z2)
 		pow(z2 - z1, 2) * 1.0);
 	return d;
 }
+
+void printFaceToFile(const Face fp, FILE* f)
+{
+	fprintf(f,"f ");
+	for (int i = 0; i < fp.size; i++)
+		fprintf(f, "%d ", fp.vertex[i]);
+	fprintf(f, "\n");
+
+}
+
+void printFaceToBin(Face fp, FILE* f)
+{
+	fwrite(&fp.size, sizeof(int), 1, f);
+	fwrite(fp.vertex, sizeof(int), fp.size, f); 
+
+
+}
+
+void loadFaceFromBin(Face* fp, FILE* f)
+{
+	fread(&fp->size, sizeof(int), 1, f);
+	fp->vertex = (int*)malloc(fp->size*sizeof(int));
+	fread(fp->vertex, sizeof(int), fp->size, f);
+
+}

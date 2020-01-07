@@ -27,5 +27,21 @@ char* vertexToString(Vertex* v)
 
 void printVerToFile(Vertex v, FILE* f)
 {
-	fprintf(f, "v %f %f %f\n", v.x, v.y, v.z);
+	fprintf(f, "v  %f %f %f\n", v.x, v.y, v.z);
+}
+
+void printVerToBin(Vertex v, FILE* f)
+{
+	fwrite(&v.x, sizeof(float), 1, f);
+	fwrite(&v.y, sizeof(float), 1, f);
+	fwrite(&v.z, sizeof(float), 1, f);
+
+}
+
+void loadVerFromBin(Vertex* v, FILE* f)
+{
+	fread(&v->x, sizeof(float), 1, f);
+	fread(&v->y, sizeof(float), 1, f);
+	fread(&v->z, sizeof(float), 1, f);
+		
 }
